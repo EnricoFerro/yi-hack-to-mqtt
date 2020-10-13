@@ -8,7 +8,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import configuration, { Configuration } from './config/configuration';
-import { HttpProviderService } from './http_provider.service';
+import { HttpProviderService } from './provider/http_provider.service';
+import { SshProviderService } from './provider/ssh_provider.service';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { HttpProviderService } from './http_provider.service';
   providers: [
     AppService,
     AnnounceService,
-    HttpProviderService
+    HttpProviderService,
+    SshProviderService
   ],
 })
 export class AppModule {}

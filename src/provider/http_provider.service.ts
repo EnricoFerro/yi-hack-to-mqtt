@@ -4,12 +4,12 @@ import { map, mergeMap } from 'rxjs/operators';
 
 import { Injectable } from '@nestjs/common';
 
-import { Configuration } from './config/configuration';
+import { Configuration } from '../config/configuration';
 
 @Injectable()
-export class HttpProviderService {
+export class HttpProviderService implements IProvider {
 
-    getUrlContent(url, timeout = 1000) {
+    private getUrlContent(url, timeout = 1000) {
         return from(axios.get(url, {
           timeout: timeout
         })).pipe(map(response => response.data)).toPromise(); 
@@ -35,7 +35,7 @@ export class HttpProviderService {
             .toPromise();
     }
     
-    setConfigCall(camera, data): Promise<any> {
+    private setConfigCall(camera, data): Promise<any> {
         let operation = '';
         Object.keys(data).forEach(item => {
             if ( operation === '' ) {
@@ -52,7 +52,7 @@ export class HttpProviderService {
             .toPromise();
     }
     
-    setConfigItem(camera,item_id,item_value) {
+    setConfigItem(camera,item_id,item_value): Promise<any> {
         if (((( item_id === 'SWITCH_ON') 
             || ( item_id === 'SAVE_VIDEO_ON_MOTION') 
             || ( item_id === 'AI_HUMAN_DETECTION') 

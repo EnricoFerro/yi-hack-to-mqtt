@@ -1,14 +1,14 @@
 
 import * as mqtt from 'mqtt';
-import axios from 'axios';
 
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services/logger.service';
 import { ConfigService } from '@nestjs/config';
 
 import { Configuration } from './config/configuration';
-import { HttpProviderService } from './http_provider.service';
+import { HttpProviderService } from './provider/http_provider.service';
 import { AnnounceService } from './announce.service';
+import { SshProviderService } from './provider/ssh_provider.service';
 
 @Injectable()
 export class AppService {
@@ -17,8 +17,26 @@ export class AppService {
   constructor(
     private configService: ConfigService,
     private announceService: AnnounceService,
-    private httpProviderService: HttpProviderService
-  ) {}
+    private httpProviderService: HttpProviderService,
+    private sshProviderService: SshProviderService
+  ) {
+  }
+
+  private getProvider(camera) {
+    const providerVariables = { 
+      source: Configuration.global && Configuration.global.provider && Configuration.global.provider.source || Configuration.cameras && Configuration.cameras[camera] && Configuration.cameras[camera].provider && Configuration.cameras[camera].provider.source || 'http',
+      user: Configuration.global && Configuration.global.provider && Configuration.global.provider.user || Configuration.cameras && Configuration.cameras[camera] && Configuration.cameras[camera].provider && Configuration.cameras[camera].provider.user || 'root',
+      password: Configuration.global && Configuration.global.provider && Configuration.global.provider.password || Configuration.cameras && Configuration.cameras[camera] && Configuration.cameras[camera].provider && Configuration.cameras[camera].provider.password
+    }
+    let provider: IProvider;
+
+    if ( providerVariables.source === 'http') {
+      provider = this.httpProviderService;
+    } else {
+      provider = this.sshProviderService;
+    }
+    return provider;
+  }
 
   log(topic: string, payload: any) {
     this.logger.log(`${topic} ${JSON.stringify(payload)}`);
@@ -30,7 +48,8 @@ export class AppService {
   }
 
   publishLink(camera: string) {
-    this.httpProviderService.getLink(camera).then((data) => {
+    const provider = this.getProvider(camera);
+    provider.getLink(camera).then((data) => {
       this.publishMqtt(`${Configuration.mqtt.base_topic}/${camera}/links`, JSON.stringify(data))
     }).catch(err => {
       this.logger.error(err);
@@ -38,7 +57,8 @@ export class AppService {
   }
 
   publishStatus(camera: string) {
-    this.httpProviderService.getStatus(camera).then((data) => {
+    const provider = this.getProvider(camera);
+    provider.getStatus(camera).then((data) => {
       this.publishMqtt(`${Configuration.mqtt.base_topic}/${camera}/info`, JSON.stringify(data))
     }).catch(err => {
       this.logger.error(err);
@@ -46,7 +66,8 @@ export class AppService {
   }
 
   publishConfig(camera: string){
-    this.httpProviderService.getConfig(camera).then((data) => {
+    const provider = this.getProvider(camera);
+    provider.getConfig(camera).then((data) => {
       this.publishMqtt(`${Configuration.mqtt.base_topic}/${camera}/config`, JSON.stringify(data))
     }).catch(err => {
       this.logger.error(err);
@@ -54,7 +75,8 @@ export class AppService {
   }
 
   publishConfigItem(camera: string, item: string){
-    this.httpProviderService.getConfig(camera).then((data) => {
+    const provider = this.getProvider(camera);
+    provider.getConfig(camera).then((data) => {
       if ( data[item]) {
         this.publishMqtt(`${Configuration.mqtt.base_topic}/${camera}/config/${item}`, data[item])
       }
@@ -64,7 +86,8 @@ export class AppService {
   }
 
   setConfigItem(camera: string, item: string, value: string){
-    this.httpProviderService.setConfigItem(camera, item, value).then((data) => {
+    const provider = this.getProvider(camera);
+    provider.setConfigItem(camera, item, value).then((data) => {
         this.publishConfig(camera);
     }).catch(err => {
       this.logger.error(err);
