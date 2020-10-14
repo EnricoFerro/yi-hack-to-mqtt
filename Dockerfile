@@ -1,4 +1,4 @@
-FROM strapi/base
+FROM node:slim
 
 
 WORKDIR /data

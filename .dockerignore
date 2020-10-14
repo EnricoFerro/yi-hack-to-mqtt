@@ -14,3 +14,4 @@ tsconfig*
 .eslintrc
 .gitignore
 .gitprettierc
+.github
