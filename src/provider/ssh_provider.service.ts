@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Configuration } from '../config/configuration';
 import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 
 @Injectable()
@@ -22,17 +22,17 @@ export class SshProviderService implements IProvider {
     rotate_off_cmd = 'sed -i "s/ROTATE=yes/ROTATE=no/g" /home/yi-hack-v4/etc/camera.conf; /home/yi-hack-v4/bin/ipc_cmd -r off';
     rotate_on_cmd = 'sed -i "s/ROTATE=no/ROTATE=yes/g" /home/yi-hack-v4/etc/camera.conf; /home/yi-hack-v4/bin/ipc_cmd -r on';
 
-    private launchCommand(camera,command, env?): Promise<any> {
-        return new Promise((resolve,reject) => {
+    private launchCommand(camera, command, env?): Promise<any> {
+        return new Promise((resolve, reject) => {
             const camera_ip = Configuration.cameras[camera].ip
             const retValue = [];
             const errValue = [];
             const conn = new Client();
-            conn.on('ready', function() {
+            conn.on('ready', function () {
                 // console.log('Client :: ready');
-                conn.exec(command, { env }, function(err, stream) {
+                conn.exec(command, { env }, function (err, stream) {
                     if (err) throw err;
-                    stream.on('close', function(code, signal) {
+                    stream.on('close', function (code, signal) {
                         // console.log('Stream :: close :: code: ' + code + ', signal: ' + signal);
                         if (code !== 0) {
                             const bufErr = Buffer.concat(errValue);
@@ -42,10 +42,10 @@ export class SshProviderService implements IProvider {
                             resolve(buf.toString());
                         }
                         conn.end();
-                    }).on('data', function(data) {
+                    }).on('data', function (data) {
                         retValue.push(data);
                         // console.log('STDOUT: ' + data);
-                    }).stderr.on('data', function(data) {
+                    }).stderr.on('data', function (data) {
                         errValue.push(data);
                         // console.log('STDERR: ' + data);
                     });
@@ -60,20 +60,20 @@ export class SshProviderService implements IProvider {
     }
 
     getLink(camera: any): Promise<any> {
-        return from(this.launchCommand(camera,'/home/yi-hack/www/cgi-bin/links.sh'))
-            .pipe(map(val => JSON.parse(val.replace('Content-type: application/json','')))).toPromise();
+        return from(this.launchCommand(camera, '/home/yi-hack/www/cgi-bin/links.sh'))
+            .pipe(map(val => JSON.parse(val.replace('Content-type: application/json', '')))).toPromise();
     }
     getStatus(camera: any): Promise<any> {
-        return from(this.launchCommand(camera,'/home/yi-hack/www/cgi-bin/status.json'))
-            .pipe(map(val => JSON.parse(val.replace('Content-type: application/json','')))).toPromise();
+        return from(this.launchCommand(camera, '/home/yi-hack/www/cgi-bin/status.json'))
+            .pipe(map(val => JSON.parse(val.replace('Content-type: application/json', '')))).toPromise();
     }
     getConfig(camera: any): Promise<any> {
-        return from(this.launchCommand(camera,'cat /home/yi-hack/etc/camera.conf'))
+        return from(this.launchCommand(camera, 'cat /home/yi-hack/etc/camera.conf'))
             .pipe(map(val => {
                 const arrVal = val.split('\n');
                 const retVal = {};
                 for (const iterator of arrVal) {
-                    if ( iterator !== '') {
+                    if (iterator !== '') {
                         const keyval = iterator.split('=');
                         retVal[keyval[0]] = keyval[1];
                     }
@@ -82,7 +82,6 @@ export class SshProviderService implements IProvider {
             })).toPromise();
     }
     setConfigItem(camera: any, item_id: any, item_value: any): Promise<any> {
-        throw new Error('Method not implemented.');
         let cmd = '';
         switch (item_value) {
             case 'yes':
@@ -90,17 +89,69 @@ export class SshProviderService implements IProvider {
                     case 'SWITCH_ON':
                         cmd = this.switch_on_cmd;
                         break;
+//                    case 'AI_HUMAN_DETECTION':
+//                        cmd = this.human_on_cmd;
+//                        break;
+//                    case 'SAVE_VIDEO_ON_MOTION':
+//                        cmd = this.save_on_cmd;
+//                        break;
                     case 'BABY_CRYING_DETECT':
                         cmd = this.baby_crying_on_cmd;
+                        break;
+                    case 'LED':
+                        cmd = this.led_on_cmd;
+                        break;
+                    case 'IR':
+                        cmd = this.ir_on_cmd;
+                    case 'ROTATE':
+                        cmd = this.rotate_on_cmd;
                         break;
                     default:
                         break;
                 }
                 break;
-        
+
             case 'no':
+                switch (item_id) {
+                    case 'SWITCH_ON':
+                        cmd = this.switch_off_cmd;
+                        break;
+//                    case 'AI_HUMAN_DETECTION':
+//                        cmd = this.human_on_cmd;
+//                        break;
+//                    case 'SAVE_VIDEO_ON_MOTION':
+//                        cmd = this.save_on_cmd;
+//                        break;
+                    case 'BABY_CRYING_DETECT':
+                        cmd = this.baby_crying_off_cmd;
+                        break;
+                    case 'LED':
+                        cmd = this.led_off_cmd;
+                        break;
+                    case 'IR':
+                        cmd = this.ir_off_cmd;
+                    case 'ROTATE':
+                        cmd = this.rotate_off_cmd;
+                        break;
+                    default:
+                        break;
+                }
                 break;
         }
+//        if (( item_id === 'SENSITIVITY') && (
+//            ( item_value === 'high') ||
+//            ( item_value === 'medium') ||
+//            ( item_value === 'high')
+//        )) {
+//            cmd = this.sensiti;
+//        }
+        if (cmd !== '') {
+            return from(this.launchCommand(camera, cmd))
+                .pipe(
+                    mergeMap(() => this.getConfig(camera))
+                ).toPromise();
+        } else {
+            return this.getConfig(camera);
+        }
     }
-
 }
