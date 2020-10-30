@@ -1,0 +1,37 @@
+homeassistant: 
+  announce: true
+    # Optional: Home Assistant discovery topic (default: homeassistant )
+  prefix: homeassistant
+global:
+  # Optional: Manifacturer of the device
+  manufacturer: 'YI'
+  # Optional: Model of the device
+  model: 'YI Hack'
+  provider: 
+    # Optional: Provider of the connection (default: http )
+    # possible options: 'http', 'ssh'
+    source: http
+    # Optional: User for the connection (default: root )
+    user: root
+    # Optional: Password for the connection ( default empty)
+    password: password
+mqtt:
+  # Required: MQTT base topic for MQTT messages
+  base_topic: yicam
+    # Required: MQTT server URL 
+  server: 'mqtt://192.168.0.100'
+cameras:
+  'yi-cam-01':
+    mqtt_prefix: 'yicam/yi-cam-01'
+    friendly_name: 'Yi Camera 01'
+    ip: '192.168.0.101'
+  'yi-cam-02':
+    mqtt_prefix: 'yicam/yi-cam-02'
+    friendly_name: 'Yi Camera 02'
+    ip: '192.168.0.102'
+    # Required: Disable availability_topic for HomeAssistant ( default true)
+    availability_topic: false
+  'yi-cam-03':
+    mqtt_prefix: 'yicam/yi-cam-03'
+    friendly_name: 'Yi Camera 03'
+    ip: '192.168.0.102'
