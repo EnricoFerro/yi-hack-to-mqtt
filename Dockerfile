@@ -12,7 +12,5 @@ COPY . .
 ENV NODE_ENV production
 ENV LOG_LEVEL DEBUG
 
-RUN npm install
-
 CMD ["npm", "run", "start:prod"]
 ENTRYPOINT ["/data/entrypoint.sh"]
