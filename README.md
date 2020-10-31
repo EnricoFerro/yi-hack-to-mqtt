@@ -3,7 +3,9 @@
 ## Description
 
 A small wrapper in NestJs to transform the [YI Hack All Winner](https://github.com/roleoroleo/yi-hack-Allwinner) webgui or ssh to a MQTT Provider.
+
 At this moment is tested only with [YI Hack All Winner](https://github.com/roleoroleo/yi-hack-Allwinner) Camera
+
 It also have an integrated with Home Assistant to MQTT Discovery.
 
 This is wrapper is inspired by [Zigbee2MQTT Home Assistant Integration](https://www.zigbee2mqtt.io/integration/home_assistant.html) and [Shelly Discovery](https://github.com/bieniu/ha-shellies-discovery)
@@ -176,6 +178,7 @@ Launch the announce mqtt discovery for Home Assistant
 ### Lovelace
 
 This is an example of lovelace configuration:
+  
 ![image](image/lovelace.png)
 
 
