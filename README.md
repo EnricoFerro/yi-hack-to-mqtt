@@ -173,6 +173,50 @@ Launch the announce mqtt discovery for Home Assistant
         topic: yicam/links/get
 ```
 
+### Lovelace
+
+This is an example of lovelace configuration:
+![image](image/lovelace.png)
+
+
+```
+type: entities
+entities:
+  - entity: sensor.yi_camera_01_firmware_version
+  - entity: sensor.yi_camera_01_home_version_2
+  - entity: sensor.yi_camera_01_model_suffix_2
+  - entity: sensor.yi_camera_01_serial_number_2
+  - type: divider
+  - entity: binary_sensor.yi_camera_01_movement
+    state_color: true
+  - entity: binary_sensor.yi_camera_01_sound_detection_2
+    state_color: true
+  - entity: binary_sensor.yi_camera_01_human_detection
+    state_color: true
+  - type: divider
+  - entity: switch.yi_camera_01_switch_status
+  - entity: switch.yi_camera_01_baby_crying_2
+  - entity: switch.yi_camera_01_status_led
+  - entity: switch.yi_camera_01_ir_led
+  - entity: switch.yi_camera_01_rotate_2
+  - type: divider
+  - entity: sensor.yi_camera_01_hostname
+  - entity: sensor.yi_camera_01_local_ip
+  - entity: sensor.yi_camera_01_netmask_2
+  - entity: sensor.yi_camera_01_gateway_2
+  - entity: sensor.yi_camera_01_mac_address
+  - entity: sensor.yi_camera_01_wifi_essid
+  - entity: sensor.yi_camera_01_wlan_strengh
+  - type: divider
+  - entity: sensor.yi_camera_01_uptime_2
+  - entity: sensor.yi_camera_01_load_avg_2
+  - entity: sensor.yi_camera_01_total_memory
+  - entity: sensor.yi_camera_01_free_memory_2
+  - entity: sensor.yi_camera_01_free_sd_2
+show_header_toggle: false
+```
+
+
 ## Docker Run
 
 In RasperryPi ( in raspbian ):
