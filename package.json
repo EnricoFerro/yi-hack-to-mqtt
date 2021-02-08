@@ -27,7 +27,7 @@
         "@nestjs/microservices": "^7.4.4",
         "@nestjs/platform-express": "^7.0.0",
         "@nestjs/schedule": "^0.4.1",
-        "axios": "^0.20.0",
+        "axios": "^0.21.1",
         "dotenv": "^8.2.0",
         "js-yaml": "^3.14.0",
         "mqtt": "^4.2.1",
