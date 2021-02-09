@@ -11,6 +11,17 @@ import configuration, { Configuration } from './config/configuration';
 import { HttpProviderService } from './provider/http_provider.service';
 import { SshProviderService } from './provider/ssh_provider.service';
 
+const getOptions = function (configuration, Configuration) {
+  let options = Configuration.mqtt.options
+  if ( options ) {
+    options.url =  Configuration.mqtt.server;
+    return options;
+  } else {
+    options = { url : Configuration.mqtt.server }
+    return options;
+  }
+}
+
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -18,9 +29,7 @@ import { SshProviderService } from './provider/ssh_provider.service';
       {
         name: 'MATH_SERVICE',
         transport: Transport.MQTT,
-        options: {
-          url:  Configuration.mqtt.server,
-        }
+        options: getOptions(configuration, Configuration)
       },
     ]),
     ConfigModule.forRoot({
