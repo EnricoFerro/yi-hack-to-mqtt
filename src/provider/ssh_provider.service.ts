@@ -117,6 +117,7 @@ export class SshProviderService implements IProvider {
                         break;
                     case 'IR':
                         cmd = this.ir_on_cmd;
+                        break;
                     case 'ROTATE':
                         cmd = this.rotate_on_cmd;
                         break;
@@ -144,6 +145,7 @@ export class SshProviderService implements IProvider {
                         break;
                     case 'IR':
                         cmd = this.ir_off_cmd;
+                        break;
                     case 'ROTATE':
                         cmd = this.rotate_off_cmd;
                         break;
