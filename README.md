@@ -256,4 +256,4 @@ docker stack deploy --compose-file docker-swarm-compose.yaml yi-hack-2-mqtt
 
 ## License
 
-* [MIT licensed](LICENSE).
+* [MIT licensed](LICENCE).
