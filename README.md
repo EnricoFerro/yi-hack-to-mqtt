@@ -55,8 +55,13 @@ global:
 mqtt:
   # Required: MQTT base topic for MQTT messages
   base_topic: yicam
-    # Required: MQTT server URL 
+  # Required: MQTT server URL 
+  # Is accepted the format mqtt(s)://admin:password@hostname
+  # for example mqtt://admin:password@192.168.0.100
   server: 'mqtt://192.168.0.100'
+  # Options for mqtt
+  # The options is defined in https://github.com/mqttjs/mqtt-packet#connect
+  options: 
 cameras:
   'yi-cam-01':
     mqtt_prefix: 'yicam/yi-cam-01'
@@ -71,7 +76,7 @@ cameras:
   'yi-cam-03':
     mqtt_prefix: 'yicam/yi-cam-03'
     friendly_name: 'Yi Camera 03'
-    ip: '192.168.0.102'
+    ip: '192.168.0.103'
 ```
 
 ## MQTT Topic and structure

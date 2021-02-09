@@ -33,7 +33,7 @@ export class YICamService {
   }
 
   publishMqtt(topic,payload) {
-    const client = mqtt.connect(Configuration.mqtt.server);
+    const client = mqtt.connect(Configuration.mqtt.server, Configuration.mqtt.options);
     client.publish(topic, payload, { retain: true })
   }
 
