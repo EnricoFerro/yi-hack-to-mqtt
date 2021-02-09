@@ -2,6 +2,7 @@ import * as mqtt from 'mqtt';
 
 import { Injectable, Logger } from "@nestjs/common";
 import { Configuration } from './config/configuration';
+import { environment } from './enviroment';
 
 class DeviceModel {
     identifiers: string[];
@@ -54,7 +55,7 @@ export class AnnounceService {
                 manufacturer: Configuration.global.manufacturer,
                 model: Configuration.global.model,
                 name: Configuration.cameras[camera].friendly_name,
-                sw_version: '0.0.1'
+                sw_version: environment.version
             },
             qos: qos,
             device_class: device_class,
@@ -145,7 +146,7 @@ export class AnnounceService {
                 manufacturer: Configuration.global.manufacturer,
                 model: Configuration.global.model,
                 name: Configuration.cameras[camera].friendly_name,
-                sw_version: '0.0.1'
+                sw_version: environment.version
             },
             icon: icon,
             json_attributes_topic: json_attributes_topic,
