@@ -1,0 +1,35 @@
+version: "3.6"
+services:
+   service:
+    image: enricoferro/yi-hack-2-mqtt:latest
+    hostname: yi-hack-2-mqtt
+    container_name: yi-hack-2-mqtt
+    configs:
+      - source: yi-hack-to-mqtt.configuration.yaml
+        target: /data/configuration.yaml
+    deploy:
+        mode: replicated
+        replicas: 1
+        resources:
+            # Hard limit - Docker does not allow to allocate more
+            limits:
+              cpus: "1"
+              memory: 128M
+        # service restart policy
+        restart_policy:
+            condition: on-failure
+            delay: 5s
+            max_attempts: 3
+            window: 120s
+        # service update configuration
+        update_config:
+            parallelism: 1
+            delay: 30s
+            failure_action: continue
+            monitor: 60s
+            max_failure_ratio: 0.3
+            order: start-first
+
+configs:
+  yi-hack-to-mqtt.configuration.yaml:
+    external: true

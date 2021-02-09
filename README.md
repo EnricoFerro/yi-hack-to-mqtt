@@ -241,6 +241,19 @@ nano configuration.yaml
 docker run -it --name yi-hack-2-mqtt -d --restart unless-stopped -v /home/pi/configuration.yaml:/data/configuration.yaml enricoferro/yi-hack-2-mqtt:latest
 ```
 
+### Docker Swarm
+
+Create and modify your configuration file:
+```
+nano configuration.yaml
+docker config create yi-hack-to-mqtt.configuration.yaml configuration.yaml
+```
+
+Lauch the docker compose for swarm:
+```
+docker stack deploy --compose-file docker-swarm-compose.yaml yi-hack-2-mqtt
+```
+
 ## License
 
 * [MIT licensed](LICENSE).
