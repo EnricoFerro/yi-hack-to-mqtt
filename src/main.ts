@@ -1,10 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { LogLevel } from '@nestjs/common';
 
 import { YiCamModule } from './yi-cam.module';
 import { Configuration } from './config/configuration';
-import { LogLevel } from '@nestjs/common';
-
 
 function getLogLevel(): LogLevel[] {
   switch (process.env.LOG_LEVEL) {
