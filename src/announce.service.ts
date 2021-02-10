@@ -77,12 +77,12 @@ export class AnnounceService {
         return announce;
     }
 
-    announceSensorGeneric(camera, icon, suffix, suffix_name, unit_of_measurement?, transform = '') {
+    announceSensorGeneric(camera, type, icon, suffix, suffix_name, unit_of_measurement?, transform = '') {
         const announce = this.initAnnunce(
             camera,
             icon,
-            `yicam/${camera}/info`,
-            `yicam/${camera}/info`,
+            `yicam/${camera}/info/${type}`,
+            `yicam/${camera}/info/${type}`,
             `${Configuration.cameras[camera].friendly_name} ${suffix_name}`,
             `${Configuration.mqtt.base_topic}-${camera}-${suffix}`,
             `{{ value_json.${suffix}${transform ? transform : ''} }}`,
@@ -117,12 +117,12 @@ export class AnnounceService {
     }
 
 
-    announceCustomValue(camera, icon, suffix, value_json, suffix_name, unit_of_measurement?, device_class?) {
+    announceCustomValue(camera, type, icon, suffix, value_json, suffix_name, unit_of_measurement?, device_class?) {
         const announce = this.initAnnunce(
             camera,
             icon,
-            `yicam/${camera}/info`,
-            `yicam/${camera}/info`,
+            `yicam/${camera}/info/${type}`,
+            `yicam/${camera}/info/${type}`,
             `${Configuration.cameras[camera].friendly_name} ${suffix_name}`,
             `${Configuration.mqtt.base_topic}-${camera}-${suffix}`,
             `{{ ${value_json} }}`,
@@ -189,68 +189,68 @@ export class AnnounceService {
      * Status.json path
      */
     annunceHostname(camera) {
-        this.announceSensorGeneric(camera, 'mdi:network', 'hostname', 'Hostname');
+        this.announceSensorGeneric(camera, 'global', 'mdi:network', 'hostname', 'Hostname');
     }
 
     annunceIp(camera) {
-        this.announceSensorGeneric(camera, 'mdi:ip', 'local_ip', 'Local IP');
+        this.announceSensorGeneric(camera, 'global', 'mdi:ip', 'local_ip', 'Local IP');
     }
 
     annunceNetmask(camera) {
-        this.announceSensorGeneric(camera, 'mdi:ip', 'netmask', 'Netmask');
+        this.announceSensorGeneric(camera, 'global', 'mdi:ip', 'netmask', 'Netmask');
     }
 
     annunceGateway(camera) {
-        this.announceSensorGeneric(camera, 'mdi:ip', 'gateway', 'Gateway');
+        this.announceSensorGeneric(camera, 'global', 'mdi:ip', 'gateway', 'Gateway');
     }
 
     annunceMacAddress(camera) {
-        this.announceSensorGeneric(camera, 'mdi:network', 'mac_addr', 'Mac Address');
+        this.announceSensorGeneric(camera, 'global', 'mdi:network', 'mac_addr', 'Mac Address');
     }
 
     annunceWlanESSID(camera) {
-        this.announceSensorGeneric(camera, 'mdi:wifi', 'wlan_essid', 'WiFi ESSID');
+        this.announceSensorGeneric(camera, 'global', 'mdi:wifi', 'wlan_essid', 'WiFi ESSID');
     }
 
 
     annunceFirmwareVersion(camera) {
-        this.announceSensorGeneric(camera, 'mdi:network', 'fw_version', 'Firmware Version');
+        this.announceSensorGeneric(camera, 'global', 'mdi:network', 'fw_version', 'Firmware Version');
     }
 
     annunceHomeVersion(camera) {
-        this.announceSensorGeneric(camera, 'mdi:memory', 'home_version', 'Home Version');
+        this.announceSensorGeneric(camera, 'global', 'mdi:memory', 'home_version', 'Home Version');
     }
 
     annunceModelSuffix(camera) {
-        this.announceSensorGeneric(camera, 'mdi:network', 'model_suffix', 'Model Suffix');
+        this.announceSensorGeneric(camera, 'global', 'mdi:network', 'model_suffix', 'Model Suffix');
     }
 
     annunceSerialNumber(camera) {
-        this.announceSensorGeneric(camera, 'mdi:webcam', 'serial_number', 'Serial Number');
+        this.announceSensorGeneric(camera, 'global', 'mdi:webcam', 'serial_number', 'Serial Number');
     }
 
     annunceTotalMemory(camera) {
-        this.announceSensorGeneric(camera, 'mdi:memory', 'total_memory', 'Total Memory', 'KB');
+        this.announceSensorGeneric(camera, 'resources', 'mdi:memory', 'total_memory', 'Total Memory', 'KB');
     }
 
     annunceFreeMemory(camera) {
-        this.announceSensorGeneric(camera, 'mdi:memory', 'free_memory', 'Free Memory', 'KB');
+        this.announceSensorGeneric(camera, 'resources', 'mdi:memory', 'free_memory', 'Free Memory', 'KB');
     }
 
     annunceFreeSD(camera) {
-        this.announceSensorGeneric(camera, 'mdi:micro-sd', 'free_sd', 'Free SD', '%', '|regex_replace(find="%", replace="", ignorecase=False)');
+        this.announceSensorGeneric(camera, 'resources', 'mdi:micro-sd', 'free_sd', 'Free SD', '%', '|regex_replace(find="%", replace="", ignorecase=False)');
     }
 
     annunceLoadAvg(camera) {
-        this.announceSensorGeneric(camera, 'mdi:network', 'load_avg', 'Load AVG');
+        this.announceSensorGeneric(camera, 'resources', 'mdi:network', 'load_avg', 'Load AVG');
     }
 
     announceUptime(camera) {
-        this.announceCustomValue(camera, 'mdi:timer-outline', 'uptime', '(as_timestamp(now())-(value_json.uptime|int))|timestamp_local', 'Uptime', undefined, 'timestamp');
+        this.announceCustomValue(camera, 'resources', 'mdi:timer-outline', 'uptime', '(as_timestamp(now())-(value_json.uptime|int))|timestamp_local', 'Uptime', undefined, 'timestamp');
     }
 
     announceWlanStrengh(camera) {
-        this.announceCustomValue(camera, 'mdi:wifi', 'wlan_strength', '((value_json.wlan_strength|int) * 100 / 70 )|int', 'Wlan Strengh', '%', 'signal_strength');
+        this.announceCustomValue(camera, 'resources', 'mdi:wifi', 'wlan_strength', '((value_json.wlan_strength|int) * 100 / 70 )|int', 'Wlan Strengh', '%', 'signal_strength');
     }
 
     /**
