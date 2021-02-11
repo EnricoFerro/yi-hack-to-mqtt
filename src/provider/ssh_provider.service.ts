@@ -41,7 +41,7 @@ export class SshProviderService implements IProvider {
                 // console.log('Client :: ready');
                 conn.exec(command, { env }, function (err, stream) {
                     if (err) throw err;
-                    stream.on('close', function (code, signal) {
+                    stream.on('close', function (code /*, signal */) {
                         // console.log('Stream :: close :: code: ' + code + ', signal: ' + signal);
                         if (code !== 0) {
                             const bufErr = Buffer.concat(errValue);

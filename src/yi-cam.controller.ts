@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config/dist';
 import { Ctx, MessagePattern, MqttContext, Payload } from '@nestjs/microservices';
-import { Cron } from '@nestjs/schedule';
+// import { Cron } from '@nestjs/schedule';
 import { YICamService } from './yi-cam.service';
 import { Configuration } from './config/configuration';
 
@@ -100,7 +100,7 @@ export class YICamController {
   @MessagePattern(Configuration.mqtt.base_topic + '/#')
   getYiCam(@Payload() data, @Ctx() context: MqttContext) {
     const regexp = new RegExp(`${Configuration.mqtt.base_topic}/(.*?)/(.*?)$`);
-    const camera = context.getTopic().match(regexp)[1];
+    // const camera = context.getTopic().match(regexp)[1];
     const suffix_topic = context.getTopic().match(regexp)[2];
     if (suffix_topic === "motion_detection_image") {
       this.appService.log(context.getTopic(), "<image_data>", 'debug');
@@ -113,7 +113,7 @@ export class YICamController {
   @MessagePattern(Configuration.homeassistant.prefix + '/#')
   getHomeAssistant(@Payload() data, @Ctx() context: MqttContext) {
     const regexp = new RegExp(`${Configuration.homeassistant.prefix}/(.*?)/(.*?)/`);
-    const component_id = context.getTopic().match(regexp)[1];
+    // const component_id = context.getTopic().match(regexp)[1];
     const camera = context.getTopic().match(regexp)[2];
     if ( Configuration.cameras[camera]) {
       this.appService.log(context.getTopic(), data, 'debug');

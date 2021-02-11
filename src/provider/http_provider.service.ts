@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { from } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Injectable, Logger } from '@nestjs/common';
 
@@ -53,7 +53,7 @@ export class HttpProviderService implements IProvider {
         const camera_ip = Configuration.cameras[camera].ip
         this.logger.debug(`http://${camera_ip}/cgi-bin/camera_settings.sh?${ operation }`);
         return from(this.getUrlContent(`http://${camera_ip}/cgi-bin/camera_settings.sh?${ operation }`, 10000))
-            .pipe(map(val => {
+            .pipe(map(() => {
                 return data; 
             }))
             .toPromise();
