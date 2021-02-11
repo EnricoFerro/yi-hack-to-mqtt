@@ -1,5 +1,5 @@
 ARG ARCH=
-FROM ${ARCH}node:slim
+FROM ${ARCH}node:14-alpine3.12
 
 
 WORKDIR /data
