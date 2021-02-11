@@ -240,6 +240,10 @@ nano configuration.yaml
 ```
 docker run -it --name yi-hack-2-mqtt -d --restart unless-stopped -v /home/pi/configuration.yaml:/data/configuration.yaml enricoferro/yi-hack-2-mqtt:latest
 ```
+### Docker Enviroment
+
+* **LOG_LEVEL** : Log level for the docker, allowed values: `ALL`, `DEBUG` , `INFO`, `WARN`, `ERROR`, `OFF`, `TRACE`
+* **CONFIGURATION_FILE**: For change the default file of configuration
 
 ### Docker Swarm
 
