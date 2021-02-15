@@ -10,6 +10,8 @@ It also have an integrated with Home Assistant to MQTT Discovery.
 
 This is wrapper is inspired by [Zigbee2MQTT Home Assistant Integration](https://www.zigbee2mqtt.io/integration/home_assistant.html) and [Shelly Discovery](https://github.com/bieniu/ha-shellies-discovery)
 
+USE AT YOUR OWN RISK.
+
 ## Installation
 
 ```bash
